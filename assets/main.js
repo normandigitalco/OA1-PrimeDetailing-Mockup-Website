@@ -122,8 +122,8 @@ const _cur=document.body.getAttribute('data-page')||'home';
 function showPage(id,_fromPop,anchor){
  if(!URLS[id])id='home';
  if(typeof closeMenu==='function')closeMenu();
- if(id===_cur&&!anchor){window.scrollTo({top:0,behavior:'smooth'});return;}
- if(id===_cur&&anchor){var t=document.getElementById(anchor);if(t){t.scrollIntoView({behavior:'smooth',block:'start'});return;}}
+ if(id===_cur&&!anchor){window.scrollTo(0,0);return;}
+ if(id===_cur&&anchor){var t=document.getElementById(anchor);if(t){t.scrollIntoView({block:'start'});return;}}
  location.href=URLS[id]+(anchor?'#'+anchor:'');
 }
 function toggleMenu(){
