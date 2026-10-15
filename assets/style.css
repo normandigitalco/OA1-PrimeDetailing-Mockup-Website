@@ -1109,3 +1109,8 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 
 [id^="svc-"]{scroll-margin-top:72px}
 .btn-dark{text-decoration:none}
+
+.lu-card{display:block;text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent}
+.lu-more{display:inline-block;margin-top:14px;padding:10px 16px;background:var(--y);color:#fff;border-radius:3px;font-family:var(--U);font-weight:800;font-size:14px;letter-spacing:1.4px;text-transform:uppercase}
+.lu-more::after{content:' \2192'}
+@media(hover:hover) and (pointer:fine){.lu-card:hover .lu-more{background:#fff;color:#05070d}}
