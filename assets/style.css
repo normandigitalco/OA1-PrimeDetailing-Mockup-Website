@@ -1046,7 +1046,6 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 .reel-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,13,0) 60%,rgba(5,7,13,.7) 100%)}
 .reel-card span{position:absolute;left:12px;bottom:11px;z-index:2;font-family:var(--U);font-weight:700;font-size:13.5px;letter-spacing:1.3px;text-transform:uppercase;color:#fff}
 @keyframes reel{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 7px))}}
-@media(hover:hover) and (pointer:fine){.reel-view:hover .reel-track{animation-play-state:paused}}
 @media(prefers-reduced-motion:reduce){.reel-view{overflow-x:auto}.reel-track{animation:none}}
 /* v13 */
 .reel-track{animation-duration:70s}
@@ -1126,3 +1125,9 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 .legal-in a{color:var(--yh);text-decoration:underline;text-underline-offset:3px}
 .legal-in a.btn-y,.legal-in a.btn-o{text-decoration:none;color:#fff;margin:6px 10px 0 0}
 .nf{min-height:60vh}
+
+.cs-wrap,.cs-stage,.cs-list{min-width:0;max-width:100%}
+.cs-stage video{max-width:100%}
+.cs-list li,.cs-list button{min-width:0}
+@media(max-width:360px){.cs-list button{padding:12px 4px}.cs-list button b{font-size:.88rem;letter-spacing:0}}
+.way-link{color:var(--yh)!important}

@@ -306,7 +306,6 @@ function handleForm(e){
  var _origShow=window.showPage;
  window.showPage=function(){_origShow.apply(this,arguments);setTimeout(observe,50);};
 })();
-window.addEventListener('pageshow',function(e){if(e.persisted){window.scrollTo(0,0);document.body.scrollTop=0;document.documentElement.scrollTop=0;}});
 function rvScroll(btn,d){var g=btn.parentNode.querySelector('.rv-grid');var c=g.querySelector('.rv-card');g.scrollBy({left:d*(c.offsetWidth+14),behavior:'smooth'});}
 
 function toggleSc(id){document.getElementById(id).classList.toggle('open');}
