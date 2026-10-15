@@ -1114,3 +1114,15 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 .lu-more{display:inline-block;margin-top:14px;padding:10px 16px;background:var(--y);color:#fff;border-radius:3px;font-family:var(--U);font-weight:800;font-size:14px;letter-spacing:1.4px;text-transform:uppercase}
 .lu-more::after{content:' \2192'}
 @media(hover:hover) and (pointer:fine){.lu-card:hover .lu-more{background:#fff;color:#05070d}}
+
+.f-consent{font-size:13px;line-height:1.55;font-weight:500;color:rgba(255,255,255,.82);margin:2px 0 14px;text-align:left}
+.f-consent a{color:#fff;text-decoration:underline;text-underline-offset:2px}
+.f-legal{color:rgba(238,243,251,.62);text-decoration:underline;text-underline-offset:2px;margin-left:10px}
+.legal-in{max-width:760px;margin:0 auto}
+.legal-in .sec-h{margin-bottom:12px}
+.legal-date{font-family:var(--U);font-weight:700;letter-spacing:1.3px;text-transform:uppercase;font-size:14px;color:var(--yh)!important;margin-bottom:22px!important}
+.legal-in p{font-size:16.5px;line-height:1.75;font-weight:500;color:rgba(238,243,251,.9);margin-bottom:16px}
+.legal-in h2{font-family:var(--H);font-weight:800;text-transform:uppercase;font-size:1.6rem;letter-spacing:.02em;color:var(--text);margin:34px 0 10px}
+.legal-in a{color:var(--yh);text-decoration:underline;text-underline-offset:3px}
+.legal-in a.btn-y,.legal-in a.btn-o{text-decoration:none;color:#fff;margin:6px 10px 0 0}
+.nf{min-height:60vh}
