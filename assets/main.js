@@ -218,11 +218,9 @@ setLang('en',false);
  document.querySelectorAll('.nav-links a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-nav')===_cur);});
  document.querySelectorAll('.mob-links a').forEach(function(a){a.classList.toggle('on',a.getAttribute('data-m')===_cur);});
  if(_cur==='gallery')buildGal();
+ // Arriving from a service link: the browser scrolls to the card natively; just open it
  var h=location.hash.replace('#','');
- if(h){window.addEventListener('load',function(){
-  var moved=false,m=function(){moved=true;};['wheel','touchmove','keydown'].forEach(function(t){window.addEventListener(t,m,{once:true,passive:true});});
-  setTimeout(function(){if(moved)return;var t=document.getElementById(h);if(!t)return;var y=Math.max(0,Math.round(t.getBoundingClientRect().top+window.pageYOffset-72));if(Math.abs(y-window.pageYOffset)>6)window.scrollTo(0,y);},350);
- });}
+ if(/^svc-s\d$/.test(h)){var _c=document.getElementById(h);if(_c)_c.classList.add('open');}
 })();
 
 function handleForm(e){
