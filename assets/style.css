@@ -1132,4 +1132,3 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 @media(max-width:360px){.cs-list button{padding:12px 4px}.cs-list button b{font-size:.88rem;letter-spacing:0}}
 .way-link{color:var(--yh)!important}
 
-html.oa-restoring body{visibility:hidden}

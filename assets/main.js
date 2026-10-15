@@ -320,12 +320,15 @@ function toggleSc(id){document.getElementById(id).classList.toggle('open');}
 function buildReel(){
  const t=document.getElementById('reelTrack');
  if(!t||t.childElementCount)return;
- const io=new IntersectionObserver(function(es){es.forEach(function(e){const v=e.target.querySelector('video');if(e.isIntersecting){v.play().catch(function(){needTap(v)});}else{v.pause();}});},{threshold:.15});
+ const _vis=new Set();
+ const io=new IntersectionObserver(function(es){es.forEach(function(e){const v=e.target.querySelector('video');if(e.isIntersecting){_vis.add(v);v.play().catch(function(){});}else{_vis.delete(v);v.pause();}});},{threshold:.15});
+ // retry: any visible reel video that is not moving gets nudged every 1.5s, so none stay on a still picture
+ setInterval(function(){_vis.forEach(function(v){if(v.paused&&!v.ended&&document.visibilityState==='visible')v.play().catch(function(){});});},1500);
  for(let r=0;r<2;r++){
   CLIPS.forEach(function(c){
    const d=document.createElement('div');d.className='reel-card';
    if(r)d.setAttribute('aria-hidden','true');
-   const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.preload='none';
+   const v=document.createElement('video');v.muted=true;v.loop=true;v.playsInline=true;v.preload='metadata';
    v.poster='/img/oaprime-clip-'+c.n+'-poster.webp';if(!r)v.setAttribute('aria-label',c.alt);
    v.src='/img/oaprime-clip-'+c.n+'.mp4';
    const s=document.createElement('span');s.textContent=c.label;
@@ -333,19 +336,3 @@ function buildReel(){
   });
  }
 }
-
-// Scroll position: saved per page, restored on refresh and back. The page stays hidden until the spot is reached, so there is no flash of the hero.
-(function(){
- var key='oa_sy:'+location.pathname,root=document.documentElement,y=window.__oaY||0;
- function done(){root.classList.remove('oa-restoring');}
- if(y){
-  var tries=0;
-  (function go(){window.scrollTo(0,y);tries++;if(Math.abs(window.scrollY-y)<=2||tries>=24){done();}else{setTimeout(go,80);}})();
-  window.addEventListener('load',function(){if(Math.abs(window.scrollY-y)>2)window.scrollTo(0,y);done();});
- }
- function save(){try{sessionStorage.setItem(key,String(Math.round(window.scrollY)));}catch(e){}}
- var tk=0;
- window.addEventListener('scroll',function(){if(tk)return;tk=setTimeout(function(){tk=0;save();},120);},{passive:true});
- window.addEventListener('pagehide',save);
- document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')save();});
-})();
