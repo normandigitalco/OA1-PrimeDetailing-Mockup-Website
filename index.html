@@ -1144,6 +1144,14 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 .sec-lead.sec-lead-l{font-weight:400;font-size:1.05rem;line-height:1.65;color:rgba(255,255,255,.86);max-width:540px;margin-top:14px}
 .ba-text .btn-y{margin-top:22px}
 
+.reel-head .sec-sub{margin-top:12px;max-width:560px}
+.faq-ans p,.faq-light .faq-ans p{font-size:16px;font-weight:500;line-height:1.7}
+.faq-light .faq-ans p{color:rgba(255,255,255,.96)}
+.reel-head .sec-sub{color:rgba(255,255,255,.8)}
+.faq-light .faq-item.open .faq-q,.faq-light .faq-btn:hover .faq-q{color:#fff!important}
+
+@media(min-width:881px){.hero-btns{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:12px}.hero-btns .btn-y,.hero-btns .btn-o{display:flex;align-items:center;justify-content:center;white-space:nowrap}}
+
 </style>
 
 </head>
@@ -1292,7 +1300,7 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
 
  <!-- DARK: Reel -->
  <section class="reel">
- <div class="reel-head reveal"><h2 class="sec-h">On The Job.</h2></div>
+ <div class="reel-head reveal"><h2 class="sec-h">On The Job.</h2><p class="sec-sub dark">Real jobs, filmed on location across Miami-Dade, Broward and the Florida Keys.</p></div>
  <div class="reel-view"><div class="reel-track" id="reelTrack"></div></div>
  </section>
 
@@ -1339,7 +1347,7 @@ footer{background:#080c16;border-top:1px solid var(--line);padding:clamp(48px,7v
  <span class="faq-q">Which areas do you cover?</span>
  <div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M6 9.5h12L12 16.5z"/></svg></div>
  </button>
- <div class="faq-ans"><p>Miami-Dade, Broward and the Florida Keys. Not sure that includes you? Text us your address.</p></div>
+ <div class="faq-ans"><p>Miami-Dade, Broward and the Florida Keys. Not sure that includes you? Text us where you are and we will let you know.</p></div>
  </div>
  <div class="faq-item" id="f4">
  <button class="faq-btn" onclick="toggleFaq('f4')">
@@ -1884,15 +1892,22 @@ document.addEventListener('keydown',function(e){
 const PAGES=['home','services','about','gallery','contact'];
 let _cur=null;
 
-function showPage(id,fromPop){
+function showPage(id,fromPop,anchor){
  if(!PAGES.includes(id))id='home';
  if(typeof closeMenu==='function')closeMenu();
  PAGES.forEach(function(p){const el=document.getElementById(p);el.classList.remove('active','visible');});
  const next=document.getElementById(id);
  next.classList.add('active');
- window.scrollTo(0,0);document.body.scrollTop=0;document.documentElement.scrollTop=0;
+ var ty=0;
  void next.offsetHeight;
- requestAnimationFrame(function(){window.scrollTo(0,0);requestAnimationFrame(function(){window.scrollTo(0,0);next.classList.add('visible');});});
+ if(anchor){var ae=document.getElementById(anchor);if(ae)ty=Math.max(0,Math.round(ae.getBoundingClientRect().top+window.pageYOffset-72));}
+ window.scrollTo(0,ty);document.body.scrollTop=ty;document.documentElement.scrollTop=ty;
+ var _go=function(){next.classList.add('visible');};
+ requestAnimationFrame(function(){window.scrollTo(0,ty);requestAnimationFrame(function(){window.scrollTo(0,ty);
+  if(!window._fontsReady&&document.fonts&&document.fonts.ready){Promise.race([document.fonts.ready,new Promise(function(r){setTimeout(r,800);})]).then(function(){window._fontsReady=1;_go();});}else{_go();}
+ });});
+ if(anchor){var _moved=false,_m=function(){_moved=true;};['wheel','touchmove','keydown'].forEach(function(t){window.addEventListener(t,_m,{once:true,passive:true});});
+  setTimeout(function(){if(_moved)return;var a2=document.getElementById(anchor);if(!a2)return;var y2=Math.max(0,Math.round(a2.getBoundingClientRect().top+window.pageYOffset-72));if(Math.abs(y2-window.pageYOffset)>6)window.scrollTo(0,y2);},350);}
  if(!fromPop){
   try{if(id==='home')history.pushState({page:'home'},'',location.pathname+location.search);else if(id!==_cur)history.pushState({page:id},'','#'+id);else history.replaceState({page:id},'','#'+id);}catch(e){}
  }
@@ -1933,7 +1948,7 @@ function selectSvc(id){
  if(b)b.classList.add('on');if(p)p.classList.add('on');
  if(isMobile&&b){setTimeout(function(){var y=b.getBoundingClientRect().top+window.scrollY-110;window.scrollTo({top:y,behavior:'smooth'});},60);}
 }
-function openSvc(id){showPage('services');setTimeout(function(){var e=document.getElementById('svc-'+id);if(e){window.scrollTo({top:e.getBoundingClientRect().top+window.scrollY-72,behavior:'auto'});}},160);}
+function openSvc(id){showPage('services',false,'svc-'+id);}
 function luScroll(d){var t=document.getElementById('luTrack');if(t)t.scrollBy({left:d*350,behavior:'smooth'});}
 function toggleSvc(id){
  const card=document.getElementById(id);
@@ -1974,8 +1989,8 @@ function registerBgVideo(v){
  const vids=[document.getElementById('heroVid'),document.getElementById('aboutVid')].filter(Boolean);
  vids.forEach(function(v){registerBgVideo(v);playVisible(v);});
  let _ul=false;
- function _unlock(){if(_ul)return;_ul=true;_bgVideos.forEach(playVisible);}
- ['touchstart','touchend','scroll','click','mousemove','keydown'].forEach(function(t){document.addEventListener(t,_unlock,{passive:true,once:true});});
+ function _unlock(){if(_ul)return;_ul=true;setTimeout(function(){_bgVideos.forEach(playVisible);},450);}
+ ['touchend','click','keydown'].forEach(function(t){document.addEventListener(t,_unlock,{passive:true,once:true});});
  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_bgVideos.forEach(function(v){if(v.offsetParent!==null)playVisible(v);});});
  window.addEventListener('pageshow',function(e){if(e.persisted)_bgVideos.forEach(function(v){if(v.offsetParent!==null)playVisible(v);});});
 })();
