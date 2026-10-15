@@ -306,7 +306,14 @@ function handleForm(e){
  var _origShow=window.showPage;
  window.showPage=function(){_origShow.apply(this,arguments);setTimeout(observe,50);};
 })();
-function rvScroll(btn,d){var g=btn.parentNode.querySelector('.rv-grid');var c=g.querySelector('.rv-card');g.scrollBy({left:d*(c.offsetWidth+14),behavior:'smooth'});}
+function rvScroll(btn,d){
+ var g=btn.parentNode.querySelector('.rv-grid');var c=g.querySelector('.rv-card');if(!g||!c)return;
+ var max=g.scrollWidth-g.clientWidth;if(max<=4)return;
+ var step=c.offsetWidth+14,x=g.scrollLeft,t;
+ // loop: past the last card goes back to the first, before the first goes to the last
+ if(d>0&&x>=max-6)t=0;else if(d<0&&x<=24)t=max;else t=Math.max(0,Math.min(max,(Math.round(x/step)+d)*step));
+ g.scrollTo({left:t,behavior:'smooth'});
+}
 
 function toggleSc(id){document.getElementById(id).classList.toggle('open');}
 
@@ -326,3 +333,19 @@ function buildReel(){
   });
  }
 }
+
+// Scroll position: saved per page, restored on refresh and back. The page stays hidden until the spot is reached, so there is no flash of the hero.
+(function(){
+ var key='oa_sy:'+location.pathname,root=document.documentElement,y=window.__oaY||0;
+ function done(){root.classList.remove('oa-restoring');}
+ if(y){
+  var tries=0;
+  (function go(){window.scrollTo(0,y);tries++;if(Math.abs(window.scrollY-y)<=2||tries>=24){done();}else{setTimeout(go,80);}})();
+  window.addEventListener('load',function(){if(Math.abs(window.scrollY-y)>2)window.scrollTo(0,y);done();});
+ }
+ function save(){try{sessionStorage.setItem(key,String(Math.round(window.scrollY)));}catch(e){}}
+ var tk=0;
+ window.addEventListener('scroll',function(){if(tk)return;tk=setTimeout(function(){tk=0;save();},120);},{passive:true});
+ window.addEventListener('pagehide',save);
+ document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')save();});
+})();
