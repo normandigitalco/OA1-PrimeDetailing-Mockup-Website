@@ -191,9 +191,9 @@ function registerBgVideo(v){
 (function(){
  const vids=[document.getElementById('heroVid'),document.getElementById('aboutVid')].filter(Boolean);
  vids.forEach(function(v){registerBgVideo(v);playVisible(v);});
- let _ul=false;
- function _unlock(){if(_ul)return;_ul=true;setTimeout(function(){_bgVideos.forEach(playVisible);},450);}
- ['touchend','click','keydown'].forEach(function(t){document.addEventListener(t,_unlock,{passive:true,once:true});});
+ /* Low Power Mode: iOS only allows play() inside a real tap, so start every paused, visible video synchronously on each tap (not once, not delayed) */
+ function _unlock(){_bgVideos.forEach(function(v){if(v.paused&&v.offsetParent!==null)playVisible(v);});}
+ ['touchend','pointerup','click','keydown'].forEach(function(t){document.addEventListener(t,_unlock,{passive:true});});
  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')_bgVideos.forEach(function(v){if(v.offsetParent!==null)playVisible(v);});});
  window.addEventListener('pageshow',function(e){if(e.persisted)_bgVideos.forEach(function(v){if(v.offsetParent!==null)playVisible(v);});});
 })();
